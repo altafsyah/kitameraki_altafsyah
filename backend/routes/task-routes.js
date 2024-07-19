@@ -75,6 +75,7 @@ function handleTaskRoutes(req, res) {
                     return [3 /*break*/, 5];
                 case 4:
                     if (req.method === "DELETE") {
+                        console.log("Keren");
                         (0, task_controller_1.deleteTask)(res, id);
                     }
                     _a.label = 5;

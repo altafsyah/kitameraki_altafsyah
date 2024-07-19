@@ -18,6 +18,8 @@ export default async function handleTaskRoutes(
   const trimmedPath = path!.replace(/^\/+|\/+$/g, "");
   const method = req.method;
 
+
+
   if (trimmedPath === "tasks") {
     if (method === "GET") {
       getTasks(req, res);
@@ -33,6 +35,7 @@ export default async function handleTaskRoutes(
     } else if (req.method === "PUT") {
       await updateTask(req, res, id);
     } else if (req.method === "DELETE") {
+      console.log("Keren");
       deleteTask(res, id);
     }
   }

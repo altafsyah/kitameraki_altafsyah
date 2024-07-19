@@ -10,7 +10,14 @@ var server = http.createServer(function (req, res) {
     var path = parsedUrl.pathname;
     var trimmedPath = path.replace(/^\/+|\/+$/g, "");
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "*");
+    res.setHeader("Access-Control-Allow-Methods", "OPTIONS, GET, POST, PUT, DELETE");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    if (req.method === "OPTIONS") {
+        console.log("Handling OPTIONS preflight request");
+        res.writeHead(204);
+        res.end();
+        return;
+    }
     if (trimmedPath.startsWith("tasks")) {
         (0, task_routes_1.default)(req, res);
     }

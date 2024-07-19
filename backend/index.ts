@@ -3,8 +3,6 @@ import * as url from "url";
 import handleTaskRoutes from "./routes/task-routes";
 const port = 8080;
 
-let tasks = [];
-
 const server = http.createServer(
   (req: http.IncomingMessage, res: http.ServerResponse) => {
     const parsedUrl = url.parse(req.url!);
@@ -12,7 +10,17 @@ const server = http.createServer(
     const trimmedPath = path!.replace(/^\/+|\/+$/g, "");
 
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "*");
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "OPTIONS, GET, POST, PUT, DELETE"
+    );
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+    if (req.method === "OPTIONS") {
+      res.writeHead(204);
+      res.end();
+      return;
+    }
 
     if (trimmedPath.startsWith("tasks")) {
       handleTaskRoutes(req, res);
