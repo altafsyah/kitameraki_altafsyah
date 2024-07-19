@@ -11,6 +11,9 @@ const server = http.createServer(
     const path = parsedUrl.pathname;
     const trimmedPath = path!.replace(/^\/+|\/+$/g, "");
 
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "*");
+
     if (trimmedPath.startsWith("tasks")) {
       handleTaskRoutes(req, res);
     } else {

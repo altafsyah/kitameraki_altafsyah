@@ -9,6 +9,8 @@ var server = http.createServer(function (req, res) {
     var parsedUrl = url.parse(req.url);
     var path = parsedUrl.pathname;
     var trimmedPath = path.replace(/^\/+|\/+$/g, "");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "*");
     if (trimmedPath.startsWith("tasks")) {
         (0, task_routes_1.default)(req, res);
     }
