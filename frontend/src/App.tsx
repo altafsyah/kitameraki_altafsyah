@@ -5,7 +5,7 @@ import TaskForm from "./components/TaskForm";
 function App() {
   return (
     <>
-      <main className="relative max-w-screen-sm w-full mx-auto bg-blue-300 h-screen p-6">
+      <main className="relative max-w-screen-sm w-full mx-auto bg-blue-300 min-h-screen p-6 pb-24">
         <h1>Taskly</h1>
         <ul className="flex items-center gap-3 mt-5">
           <li>
