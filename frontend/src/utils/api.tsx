@@ -70,4 +70,27 @@ async function deleteTask(id: number): Promise<boolean> {
   }
 }
 
-export { getTasks, createTask, deleteTask };
+async function updateTask(task: TaskItemProps): Promise<boolean> {
+  try {
+    const response = await fetch(`${API_URL}/tasks/${task.id}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        ...task,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error updating task:", error);
+    return false;
+  }
+}
+
+export { getTasks, createTask, deleteTask, updateTask };

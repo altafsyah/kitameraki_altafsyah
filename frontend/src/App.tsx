@@ -1,6 +1,8 @@
 import clsx from "clsx";
 import TaskList from "./components/TaskList";
 import TaskForm from "./components/TaskForm";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -41,6 +43,7 @@ function App() {
         </ul>
         <TaskList />
         <TaskForm />
+        <ToastContainer position="bottom-left" />
       </main>
     </>
   );
