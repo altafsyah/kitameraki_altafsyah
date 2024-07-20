@@ -1,7 +1,7 @@
 import { FormEvent, useState } from "react";
-import { deleteTask, updateTask } from "../utils/api";
 import clsx from "clsx";
 import { toast } from "react-toastify";
+import { useTaskContext } from "../context/task-context";
 
 export type TaskItemProps = {
   id: number;
@@ -19,9 +19,11 @@ export default function TaskItem(props: TaskItemProps) {
     isComplete: props.isComplete,
   });
 
+  const { delTask, editTask } = useTaskContext();
+
   const handleUpdate = async () => {
     try {
-      const res = await updateTask(task);
+      const res = await editTask(task);
       if (res) {
         toast.info("Success Updating Task!");
       } else {
@@ -36,7 +38,7 @@ export default function TaskItem(props: TaskItemProps) {
 
   const handleDelete = async () => {
     try {
-      const res = await deleteTask(props.id);
+      const res = await delTask(props.id);
       if (res) {
         toast.info("Success Deleting Task!");
       } else {
@@ -62,7 +64,7 @@ export default function TaskItem(props: TaskItemProps) {
   };
 
   return (
-    <li className="bg-white p-3 rounded shadow flex gap-4 justify-between items-center mt-3">
+    <>
       <div className="w-fit">
         <input
           disabled={!isEditing}
@@ -122,6 +124,6 @@ export default function TaskItem(props: TaskItemProps) {
           Delete
         </button>
       </div>
-    </li>
+    </>
   );
 }

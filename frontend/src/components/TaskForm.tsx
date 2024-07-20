@@ -1,12 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Panel, TextField } from "@fluentui/react";
 import { FormEvent, useCallback, useRef, useState } from "react";
-import { createTask } from "../utils/api";
+import { toast } from "react-toastify";
+import { useTaskContext } from "../context/task-context";
 
 export default function TaskForm() {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const { addTask } = useTaskContext();
 
   const dismissPanel = () => setIsPanelOpen(false);
 
@@ -36,12 +38,18 @@ export default function TaskForm() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(new FormData(event.currentTarget));
     try {
-      const res = await createTask(new FormData(event.currentTarget));
-      dismissPanel();
+      const res = await addTask(new FormData(event.currentTarget));
+      if (res) {
+        toast.info("Success");
+      } else {
+        throw new Error();
+      }
     } catch (error) {
       console.error("Error:", error);
+      toast.error("Failed Creating Task");
+    } finally {
+      dismissPanel();
     }
   };
 

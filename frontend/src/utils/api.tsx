@@ -1,17 +1,21 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TaskItemProps } from "../components/TaskItem";
 
 const API_URL = "http://localhost:8080";
 
-async function getTasks(): Promise<TaskItemProps[]> {
+async function getTasks(page: number) {
   try {
     const tasks: TaskItemProps[] = [];
-    const res = await fetch(`${API_URL}/tasks`).then(
-      async (data) => (await data.json()) as Promise<[]>
+    const res = await fetch(`${API_URL}/tasks?page=${page}`).then(
+      async (data) => {
+        if (data.ok) {
+          return await data.json();
+        }
+      }
     );
-    console.log(res);
 
-    if (res.length > 0) {
-      res.forEach((task) =>
+    if (res["data"].length > 0) {
+      res["data"].forEach((task: any) =>
         tasks.push({
           id: task["id"],
           name: task["name"],
@@ -19,16 +23,16 @@ async function getTasks(): Promise<TaskItemProps[]> {
           isComplete: task["description"],
         })
       );
-      return tasks;
+      return { tasks: tasks, totalPages: res["totalPages"] };
     }
-    return [];
+    return { tasks: [], totalPages: res["totalPages"] };
   } catch (error) {
     console.log(error);
-    return [];
+    return { tasks: [], totalPages: 0 };
   }
 }
 
-async function createTask(task: FormData): Promise<boolean> {
+async function createTask(task: FormData) {
   try {
     const res = await fetch(`${API_URL}/tasks`, {
       method: "POST",
@@ -38,12 +42,12 @@ async function createTask(task: FormData): Promise<boolean> {
       }),
     });
     if (res.ok) {
-      return true;
+      return await res.json().then((value) => value["data"]);
     }
 
-    return false;
+    return null;
   } catch (error) {
-    return false;
+    return null;
   }
 }
 
