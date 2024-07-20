@@ -35,7 +35,6 @@ export default async function handleTaskRoutes(
     } else if (req.method === "PUT") {
       await updateTask(req, res, id);
     } else if (req.method === "DELETE") {
-      console.log("Keren");
       deleteTask(res, id);
     }
   }

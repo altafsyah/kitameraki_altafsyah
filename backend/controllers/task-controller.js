@@ -54,10 +54,16 @@ exports.deleteTask = deleteTask;
 exports.updateTask = updateTask;
 var task_1 = require("../task");
 var helper_1 = require("../helper");
+var url_1 = require("url");
 function getTasks(req, res) {
     try {
+        var query = (0, url_1.parse)(req.url, true).query;
+        var page = parseInt(query.page) || 1;
+        var itemPerPage = 10;
+        var startIndex = (page - 1) * itemPerPage;
         var tasks = task_1.Task.getAll();
-        (0, helper_1.json)(res, 200, tasks);
+        var paginated = tasks.slice(startIndex, startIndex + itemPerPage);
+        (0, helper_1.json)(res, 200, paginated);
     }
     catch (error) {
         (0, helper_1.json)(res, 500, error);

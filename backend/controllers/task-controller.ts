@@ -1,12 +1,17 @@
 import { IncomingMessage, ServerResponse } from "http";
 import { Task, TTask } from "../task";
 import { json, notFound, parseBody } from "../helper";
-import { parse } from "path";
+import { parse } from "url";
 
 function getTasks(req: IncomingMessage, res: ServerResponse) {
   try {
+    const { query } = parse(req.url!, true);
+    const page = parseInt(query.page as string) || 1;
+    const itemPerPage = 10;
+    const startIndex = (page - 1) * itemPerPage;
     const tasks = Task.getAll();
-    json(res, 200, tasks);
+    const paginated = tasks.slice(startIndex, startIndex + itemPerPage);
+    json(res, 200, paginated);
   } catch (error) {
     json(res, 500, error);
   }
