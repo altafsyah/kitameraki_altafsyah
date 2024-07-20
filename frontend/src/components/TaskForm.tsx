@@ -1,14 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Panel, TextField } from "@fluentui/react";
+import {
+  DatePicker,
+  defaultDatePickerStrings,
+  Panel,
+  SpinButton,
+  TextField,
+} from "@fluentui/react";
 import { FormEvent, useCallback, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useTaskContext } from "../context/task-context";
+import { useFormContext } from "../context/form-context";
 
 export default function TaskForm() {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const { addTask } = useTaskContext();
+  const { fields } = useFormContext();
+
+  console.log(fields);
 
   const dismissPanel = () => setIsPanelOpen(false);
 
@@ -81,6 +91,30 @@ export default function TaskForm() {
               autoAdjustHeight
               scrollContainerRef={containerRef}
             />
+            {fields.length > 0 &&
+              fields.map((field) => {
+                if (field.type == "textField") {
+                  return (
+                    <TextField
+                      label={field.name}
+                      name={field.name}
+                      className="mt-3"
+                    />
+                  );
+                } else if (field.type == "dateField") {
+                  return (
+                    <DatePicker
+                      placeholder="Select a Date"
+                      ariaLabel="Select a Date"
+                      strings={defaultDatePickerStrings}
+                      label={field.name}
+                      className="mt-3"
+                    />
+                  );
+                } else if (field.type == "spinButton") {
+                  return <SpinButton label={field.name} />;
+                }
+              })}
           </div>
         </form>
       </Panel>
