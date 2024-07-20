@@ -7,11 +7,13 @@ function getTasks(req: IncomingMessage, res: ServerResponse) {
   try {
     const { query } = parse(req.url!, true);
     const page = parseInt(query.page as string) || 1;
-    const itemPerPage = 10;
-    const startIndex = (page - 1) * itemPerPage;
+    const itemsPerPage = 10;
+    const startIndex = (page - 1) * itemsPerPage;
     const tasks = Task.getAll();
-    const paginated = tasks.slice(startIndex, startIndex + itemPerPage);
-    json(res, 200, paginated);
+    const paginated = tasks.slice(startIndex, startIndex + itemsPerPage);
+    const totalPages = Math.ceil(tasks.length / itemsPerPage);
+
+    json(res, 200, { data: paginated, totalPages: totalPages });
   } catch (error) {
     json(res, 500, error);
   }

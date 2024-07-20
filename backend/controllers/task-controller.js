@@ -59,11 +59,12 @@ function getTasks(req, res) {
     try {
         var query = (0, url_1.parse)(req.url, true).query;
         var page = parseInt(query.page) || 1;
-        var itemPerPage = 10;
-        var startIndex = (page - 1) * itemPerPage;
+        var itemsPerPage = 10;
+        var startIndex = (page - 1) * itemsPerPage;
         var tasks = task_1.Task.getAll();
-        var paginated = tasks.slice(startIndex, startIndex + itemPerPage);
-        (0, helper_1.json)(res, 200, paginated);
+        var paginated = tasks.slice(startIndex, startIndex + itemsPerPage);
+        var totalPages = Math.ceil(tasks.length / itemsPerPage);
+        (0, helper_1.json)(res, 200, { data: paginated, totalPages: totalPages });
     }
     catch (error) {
         (0, helper_1.json)(res, 500, error);
